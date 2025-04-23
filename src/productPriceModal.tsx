@@ -1,16 +1,3 @@
-// 1. Analizando los requisitos:
-//    - Necesitamos un modal para mostrar precios de productos
-//    - Debe ser sin librerías externas
-//    - Debe manejar estados de carga y errores
-//    - Debe mostrar datos de una API
-//    - Debe ser TypeScript
-// 
-// 2. Planificando la estructura:
-//    - Usaremos useState para manejar estados
-//    - Implementaremos una interfaz para los datos
-//    - Crearemos estilos inline para el modal
-//    - Manejaremos errores y carga
-
 import { useState, useEffect } from 'react';
 
 // 3. Definiendo las interfaces:
@@ -32,7 +19,7 @@ interface ProductPriceData {
 
 // 4. Implementando el componente:
 //    - Usaremos estados para modal, datos, carga y errores
-//    - Implementaremos estilos inline para el modal
+//    - Implementaremos estilos inline con style
 //    - Manejaremos la carga de datos con useEffect
 
 const ProductPriceModal = (barcode: any) => {
@@ -40,7 +27,7 @@ const ProductPriceModal = (barcode: any) => {
   const [data, setData] = useState<ProductPriceData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-    console.log (barcode.bar)
+  
   const fetchData = async () => {
     setIsLoading(true);
     setError(null);
@@ -68,84 +55,137 @@ const ProductPriceModal = (barcode: any) => {
     }
   }, [isOpen]);
 
-// 5. Implementando el JSX:
-//    - Crearemos un modal con estilos inline
-//    - Usaremos CSS modules para los estilos
-//    - Implementaremos una estructura clara para los precios
-
   return (
-    <div className="p-4">
+    <div style={{ padding: '16px' }}>
       <button 
         onClick={() => setIsOpen(true)}
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        style={{
+          padding: '8px 16px',
+          backgroundColor: '#3b82f6',
+          color: 'white',
+          borderRadius: '4px',
+          border: 'none',
+          cursor: 'pointer'
+        }}
+        onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}
+        onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#3b82f6'}
       >
         Ver Precios
       </button>
 
       <div 
-        className={`
-          ${isOpen ? 'fixed inset-0' : 'hidden'}
-          bg-black/50 flex items-center justify-center
-          z-50
-        `}
+        style={{
+          display: isOpen ? 'flex' : 'none',
+          position: 'fixed',
+          inset: '0',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: '50'
+        }}
       >
         <div 
-          className={`
-            bg-white rounded-lg shadow-lg
-            max-w-2xl w-full
-            overflow-hidden
-          `}
+          style={{
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            maxWidth: '42rem',
+            width: '100%',
+            overflow: 'hidden'
+          }}
         >
-          <div className="p-4 border-b">
-            <h2 className="text-2xl font-bold">
+          <div style={{ padding: '16px', borderBottom: '1px solid #e5e7eb' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
               Detalles de Precios
             </h2>
           </div>
 
-          <div className="p-4">
+          <div style={{ padding: '16px' }}>
             {isLoading ? (
-              <div className="flex items-center justify-center p-8">
-                <div className="border-4 border-blue-500 border-t-transparent w-8 h-8 rounded-full animate-spin" />
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                padding: '32px' 
+              }}>
+                <div style={{ 
+                  border: '4px solid #3b82f6', 
+                  borderTopColor: 'transparent', 
+                  width: '32px', 
+                  height: '32px', 
+                  borderRadius: '50%', 
+                  animation: 'spin 1s linear infinite' 
+                }} />
               </div>
             ) : error ? (
-              <div className="p-4 text-red-500">
+              <div style={{ padding: '16px', color: '#ef4444' }}>
                 {error}
               </div>
             ) : data ? (
-              <div className="space-y-4">
-                <div className="border rounded-lg p-4">
-                  <h3 className="text-lg font-semibold mb-2">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ 
+                  border: '1px solid #e5e7eb', 
+                  borderRadius: '8px', 
+                  padding: '16px' 
+                }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '8px' }}>
                     Precios Base
                   </h3>
-                  <div className="space-y-2">
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <p>Precio Regular: ${data.regularprice.toFixed(2)}</p>
                     <p>Impuesto Original: ${data.origintax.toFixed(2)}%</p>
                     <p>Precio Comercial: ${data.commercialPrice.toFixed(2)}</p>
                   </div>
                 </div>
 
-                <div className="border rounded-lg p-4">
-                  <h3 className="text-lg font-semibold mb-2">
+                <div style={{ 
+                  border: '1px solid #e5e7eb', 
+                  borderRadius: '8px', 
+                  padding: '16px' 
+                }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '8px' }}>
                     Precios Funcionales
                   </h3>
-                  <div className="space-y-2">
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <p>Precio Funcional: {data.functionalPrice !== null ? `$${data.functionalPrice.toFixed(2)}` : 'No disponible'}</p>
                     <p>Precio Total Funcional: ${data.finalFullFunctionalPrice.toFixed(2)}</p>
                     <p>Precio Promocional Funcional: ${data.finalFullPricePromotionFunctional.toFixed(2)}</p>
                   </div>
                 </div>
 
-                <div className="border rounded-lg p-4">
-                  <h3 className="text-lg font-semibold mb-2">
+                <div style={{ 
+                  border: '1px solid #e5e7eb', 
+                  borderRadius: '8px', 
+                  padding: '16px' 
+                }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '8px' }}>
                     Precios Comerciales
                   </h3>
-                  <div className="space-y-2">
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <p>Precio Total Comercial: {data.finalFullPriceCommercial !== null ? `$${data.finalFullPriceCommercial.toFixed(2)}` : 'No disponible'}</p>
                     <p>Precio Promocional Comercial: ${data.finalFullPricePromotionCommercial.toFixed(2)}</p>
                   </div>
                 </div>
               </div>
             ) : null}
+          </div>
+
+          <div style={{ padding: '16px', borderTop: '1px solid #e5e7eb', display: 'flex', justifyContent: 'flex-end' }}>
+            <button
+              onClick={() => setIsOpen(false)}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#6b7280',
+                color: 'white',
+                borderRadius: '4px',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#4b5563'}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#6b7280'}
+            >
+              Cerrar
+            </button>
           </div>
         </div>
       </div>
